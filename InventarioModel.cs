@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace Inventario
 {
     class InventarioModel
     {
-        /*public int registro(Usuarios usuario)
-        {
-            MySqlConnection cone = ConexionDB.GetConnection();
-            cone.Open();
-
-            string sql = "INSERT INTO adminusers (nombre_usuaro, password, admin_id) VALUES @nombre_usuario, @password, @id)";
-
-            MySqlCommand comando = new MySqlCommand(sql, cone);
-            comando.Parameters.AddWithValue("@nombre_usuario", usuario.Usuario);
-            comando.Parameters.AddWithValue("@password", usuario.Password);
-            comando.Parameters.AddWithValue("@admin_id", 1);
-        } */
-
 
         public Usuarios loginUsuario(string usuario)
         {
@@ -45,6 +33,38 @@ namespace Inventario
                 usr.Id = int.Parse(reader["id"].ToString());
             }
             return usr;
+        }
+
+        public bool ExistenciaProducto(string nombreProducto)
+        {
+            // conexion 
+            MySqlConnection cone = ConexionDB.GetConnection();
+            cone.Open();
+
+            string productoExistencia = "SELECT COUNT(*) FROM productos WHERE nombre = @nombre"; //existencia de producto a partir de la cantidad con mismo nombre
+            MySqlCommand comandoExistencia = new MySqlCommand(productoExistencia, cone);
+            comandoExistencia.Parameters.AddWithValue("@nombre", nombreProducto);//añadir el parametro a la consulta (evitar inyección SQL)
+
+            int cantidadExistente = Convert.ToInt32(comandoExistencia.ExecuteScalar()); // cantidad de productos con el mismo nombre en la BDD 
+
+            cone.Close();
+
+            return cantidadExistente > 0; //si hay productos, retorna true. Si no hay productos, retorna false
+        }
+        public void InsertarProductos(string cantidadProducto, string precioProducto, string nombreProducto)
+        {
+            MySqlConnection cone = ConexionDB.GetConnection(); // conexion 
+            cone.Open(); // abrir conexion
+
+            string sql = "INSERT INTO productos (nombre, cantidad, precio) VALUES (@nombre, @cantidad, @precio)";
+            MySqlCommand comando = new MySqlCommand(sql, cone);
+            comando.Parameters.AddWithValue("@nombre", nombreProducto);
+            comando.Parameters.AddWithValue("@cantidad", cantidadProducto);
+            comando.Parameters.AddWithValue("@precio", precioProducto);
+
+            comando.ExecuteNonQuery();
+
+            cone.Close();
         }
     }
 }

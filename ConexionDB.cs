@@ -19,7 +19,8 @@ namespace Inventario
             string servidor = "localhost";
             string bd = "inventario";
             string usuario = "root";
-            string password = "adminsql123";
+            //string password = "adminsql123";
+            string password = "root1234";
             string puerto = "3306";
 
             string cadenaCone = "server=" + servidor + ";" + "port=" + puerto + ";" + "user id=" + usuario + ";" + "password=" + password + ";" + "database=" + bd + ";";
