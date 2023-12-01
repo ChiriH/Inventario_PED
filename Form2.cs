@@ -38,5 +38,11 @@ namespace Inventario
             form4.Visible = true;
             this.Visible = false;
         }
+        private void btnModEli_Click(object sender, EventArgs e)
+        {
+            Form5 form5 = new Form5();
+            form5.Visible = true;
+            this.Visible = false;
+        }
     }
 }

@@ -32,7 +32,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.btnCerrar = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgProductos = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtID = new System.Windows.Forms.TextBox();
             this.btnAgregar = new System.Windows.Forms.Button();
@@ -43,7 +43,7 @@
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtProducto = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgProductos)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,13 +93,16 @@
             this.btnCerrar.Text = "Regresar";
             this.btnCerrar.UseVisualStyleBackColor = false;
             // 
-            // dataGridView1
+            // dgProductos
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(25, 120);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(516, 276);
-            this.dataGridView1.TabIndex = 49;
+            this.dgProductos.AllowUserToAddRows = false;
+            this.dgProductos.AllowUserToDeleteRows = false;
+            this.dgProductos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgProductos.Location = new System.Drawing.Point(25, 120);
+            this.dgProductos.Name = "dgProductos";
+            this.dgProductos.Size = new System.Drawing.Size(516, 276);
+            this.dgProductos.TabIndex = 35;
+            this.dgProductos.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgProductos_CellDoubleClick);
             // 
             // groupBox1
             // 
@@ -141,6 +144,7 @@
             this.btnAgregar.TabIndex = 39;
             this.btnAgregar.Text = "Eliminar";
             this.btnAgregar.UseVisualStyleBackColor = false;
+            this.btnAgregar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
             // txtCantidad
             // 
@@ -162,6 +166,7 @@
             this.btnBuscar.TabIndex = 37;
             this.btnBuscar.Text = "Modificar";
             this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnModificar_Click);
             // 
             // label5
             // 
@@ -218,7 +223,7 @@
             this.ClientSize = new System.Drawing.Size(838, 498);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnCerrar);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgProductos);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -226,7 +231,7 @@
             this.Name = "Form5";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form5";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgProductos)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -239,7 +244,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnCerrar;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgProductos;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtID;
         private System.Windows.Forms.Button btnAgregar;

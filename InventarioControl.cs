@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -84,5 +85,67 @@ namespace Inventario
             return respuesta;
 
         }
+
+        //Controlador MODIFICAR
+        public string ctrlProductos2(string idProducto, string cantidadProducto, string precioProducto, string nombreProducto)
+        {
+            InventarioModel modelo = new InventarioModel();
+
+            string respuesta = "";
+
+            if (string.IsNullOrEmpty(nombreProducto) || string.IsNullOrEmpty(cantidadProducto) || string.IsNullOrEmpty(precioProducto))
+            {
+                respuesta = "Debe llenar todos los campos";
+            }
+            else
+            {
+                int cantidad;
+                decimal precio;
+
+                if (!int.TryParse(cantidadProducto, out cantidad) || !decimal.TryParse(precioProducto, out precio))
+                {
+                    respuesta = "Cantidad o precio no válido";
+                }
+                else
+                {
+                    try
+                    {
+                        modelo.ModificarProductos(idProducto, cantidadProducto, precioProducto, nombreProducto);
+                        respuesta = "Producto modificado!";
+                        // Después de la modificación, vuelve a cargar los productos en el DataGridView
+
+                    }
+                    catch (MySqlException ex)
+                    {
+                        respuesta = "Error al modificar el producto: " + ex.Message + "[id producto: " + idProducto + ", cant: " + cantidadProducto
+                            + ", precio: " + precioProducto + ", nombre: " + nombreProducto + "]"; //Imprime el error junto a los valores guardados
+                    }
+                }
+            }
+
+            return respuesta;
+        }
+
+        public string ctrlProductos3(string idProducto)
+        {
+            InventarioModel modelo = new InventarioModel();
+            string respuesta = "";
+
+            try
+            {
+                modelo.EliminarProductos(idProducto);
+                respuesta = "Producto eliminado!";
+            }
+            catch (MySqlException ex)
+            {
+                respuesta = "Error al eliminar el producto: " + ex.Message;
+            }
+
+            return respuesta;
+        }
+
+
+
     }
+
 }

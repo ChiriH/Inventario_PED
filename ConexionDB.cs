@@ -19,18 +19,23 @@ namespace Inventario
             string servidor = "localhost";
             string bd = "inventario";
             string usuario = "root";
-            //string password = "adminsql123";
-            string password = "root1234";
+            string password = "base0326";
+            //string password = "root1234"; contraseña william
             string puerto = "3306";
 
             string cadenaCone = "server=" + servidor + ";" + "port=" + puerto + ";" + "user id=" + usuario + ";" + "password=" + password + ";" + "database=" + bd + ";";
 
-            MySqlConnection cone = new MySqlConnection(cadenaCone);
 
-            return cone;
+            try
+            {
+                MySqlConnection cone = new MySqlConnection(cadenaCone);
+                return cone;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
         }
-
-        
-    
     }
 }

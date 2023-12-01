@@ -28,32 +28,19 @@ namespace Inventario
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            string producto = txtProducto.Text;
-            string cantidadTexto = txtCantidad.Text;
-            string precioTexto = txtPrecio.Text;
+            string nombreProducto = txtProducto.Text;
+            string cantidadProducto = txtCantidad.Text;
+            string precioProducto = txtPrecio.Text;
 
+            InventarioControl ctrl = new InventarioControl();
+            string respuesta = ctrl.ctrlProductos(cantidadProducto, precioProducto, nombreProducto);
 
-            if (string.IsNullOrEmpty(producto) || string.IsNullOrEmpty(cantidadTexto) || string.IsNullOrEmpty(precioTexto))
-            {
-                MessageBox.Show("Debe llenar todos los campos", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if(!int.TryParse(cantidadTexto, out int cantidad))
-            {
-                // Convertir cantidad y precio a tipos numéricos
-                
-                
-                    MessageBox.Show("La cantidad debe ser un número válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else if (!float.TryParse(precioTexto, out float precio))
-                {
-                    MessageBox.Show("El precio debe ser un número válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
-                }
-                else
-                {
-                
-                MessageBox.Show("Los campos se han completado correctamente.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
-                }
-            }
+            MessageBox.Show(respuesta);
+
+            txtProducto.Clear();
+            txtCantidad.Clear();
+            txtPrecio.Clear();
         }
     }
+}
 

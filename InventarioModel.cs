@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,73 @@ namespace Inventario
             comando.ExecuteNonQuery();
 
             cone.Close();
+        }
+        public void MostrarProductos(DataGridView tablaProductos)
+        {
+            try
+            {
+                MySqlConnection cone = ConexionDB.GetConnection();
+                string sql = "select * from productos";
+                tablaProductos.DataSource = null;
+                MySqlDataAdapter adapter = new MySqlDataAdapter(sql, ConexionDB.GetConnection());
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                tablaProductos.DataSource = dt;
+
+                cone.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se mostraron los datos de la base de datos, error: " + ex.ToString());
+            }
+        }
+
+        //Seleccionar productos a modificar del DataGridView
+        public void SelectProductos(DataGridView tablaProductos, TextBox id, TextBox nombreProducto, TextBox precioProducto, TextBox cantidadProducto)
+        {
+            try
+            {
+                id.Text = tablaProductos.CurrentRow.Cells[0].Value.ToString();
+                nombreProducto.Text = tablaProductos.CurrentRow.Cells[1].Value.ToString();
+                precioProducto.Text = tablaProductos.CurrentRow.Cells[2].Value.ToString();
+                cantidadProducto.Text = tablaProductos.CurrentRow.Cells[3].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Productos no seleccionados, error: " + ex.ToString());
+            }
+        }
+        //Modificar productos del DataGridView
+        public void ModificarProductos(string idProducto, string cantidadProducto, string precioProducto, string nombreProducto)
+        {
+            MySqlConnection cone = ConexionDB.GetConnection();
+            cone.Open();
+
+            string sql = "UPDATE productos SET cantidad = @cantidad, precio = @precio, nombre = @nombre WHERE id = @id";
+            MySqlCommand comando = new MySqlCommand(sql, cone);
+            comando.Parameters.AddWithValue("@id", idProducto);
+            comando.Parameters.AddWithValue("@nombre", nombreProducto);
+            comando.Parameters.AddWithValue("@cantidad", cantidadProducto);
+            comando.Parameters.AddWithValue("@precio", precioProducto);
+
+            comando.ExecuteNonQuery();
+
+            cone.Close();
+        }
+
+        public void EliminarProductos(string idProducto)
+        {
+            MySqlConnection cone = ConexionDB.GetConnection();
+            cone.Open();
+
+            string sql = "DELETE FROM productos WHERE id = @id";
+            MySqlCommand comando = new MySqlCommand(sql, cone);
+            comando.Parameters.AddWithValue("@id", idProducto);
+
+            comando.ExecuteNonQuery();
+
+            cone.Close();
+
         }
     }
 }
