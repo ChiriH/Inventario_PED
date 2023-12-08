@@ -48,26 +48,41 @@ namespace Inventario
             txtProducto.Clear();
             txtCantidad.Clear();
             txtPrecio.Clear();
+            txtID.Clear();
         }
 
 
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+
             string idProducto = txtID.Text;
+            // Preguntar si se desea eliminar un producto
+            DialogResult result = MessageBox.Show("¿Seguro que deseas eliminar este producto?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            InventarioControl ctrl = new InventarioControl();
-            string respuesta = ctrl.ctrlProductos3(idProducto);
+            if (result == DialogResult.Yes)
+            {
+                InventarioControl ctrl = new InventarioControl();
+                string respuesta = ctrl.ctrlProductos3(idProducto);
 
-            MessageBox.Show(respuesta);
+                MessageBox.Show(respuesta);
 
-            // cargar tabla tras borrar un producto
-            InventarioModel productos = new InventarioModel();
-            productos.MostrarProductos(dgProductos);
+                // cargar tabla tras borrar un producto
+                InventarioModel productos = new InventarioModel();
+                productos.MostrarProductos(dgProductos);
 
-            txtProducto.Clear();
-            txtCantidad.Clear();
-            txtPrecio.Clear();
+                txtProducto.Clear();
+                txtCantidad.Clear();
+                txtPrecio.Clear();
+                txtID.Clear();
+            }
+                
+        }
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.Show();
+            this.Close();
         }
     }
 }

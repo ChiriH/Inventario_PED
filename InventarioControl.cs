@@ -60,21 +60,29 @@ namespace Inventario
                 }
                 else
                 {
-                    try
+                    if(cantidad <= 0 || precio <= 0)
                     {
-                        if (modelo.ExistenciaProducto(nombreProducto))
-                        {
-                            respuesta = "El producto ya existe. No se puede añadir duplicados.";
-                        }
-                        else
-                        {
-                            modelo.InsertarProductos(cantidadProducto, precioProducto, nombreProducto);
-                            respuesta = "Producto añadido!";
-                        }
+
+                        respuesta = "¡Cantidad y precio deben ser mayor a 0!";
                     }
-                    catch (MySqlException ex)
+                    else
                     {
-                        respuesta = "Error al guardar el producto: " + ex.Message;
+                        try
+                        {
+                            if (modelo.ExistenciaProducto(nombreProducto))
+                            {
+                                respuesta = "El producto ya existe. No se puede añadir duplicados.";
+                            }
+                            else
+                            {
+                                modelo.InsertarProductos(cantidadProducto, precioProducto, nombreProducto);
+                                respuesta = "Producto añadido!";
+                            }
+                        }
+                        catch (MySqlException ex)
+                        {
+                            respuesta = "Error al guardar el producto: " + ex.Message;
+                        }
                     }
                 }
 
@@ -93,34 +101,50 @@ namespace Inventario
 
             string respuesta = "";
 
-            if (string.IsNullOrEmpty(nombreProducto) || string.IsNullOrEmpty(cantidadProducto) || string.IsNullOrEmpty(precioProducto))
+            if (string.IsNullOrEmpty(idProducto))
             {
-                respuesta = "Debe llenar todos los campos";
+                respuesta = "Selecciona un producto, por favor";
             }
             else
             {
-                int cantidad;
-                decimal precio;
-
-                if (!int.TryParse(cantidadProducto, out cantidad) || !decimal.TryParse(precioProducto, out precio))
+                if (string.IsNullOrEmpty(nombreProducto) || string.IsNullOrEmpty(cantidadProducto) || string.IsNullOrEmpty(precioProducto))
                 {
-                    respuesta = "Cantidad o precio no válido";
+                    respuesta = "Debe llenar todos los campos";
                 }
                 else
                 {
-                    try
-                    {
-                        modelo.ModificarProductos(idProducto, cantidadProducto, precioProducto, nombreProducto);
-                        respuesta = "Producto modificado!";
-                        // Después de la modificación, vuelve a cargar los productos en el DataGridView
+                    int cantidad;
+                    decimal precio;
 
-                    }
-                    catch (MySqlException ex)
+                    if (!int.TryParse(cantidadProducto, out cantidad) || !decimal.TryParse(precioProducto, out precio))
                     {
-                        respuesta = "Error al modificar el producto: " + ex.Message + "[id producto: " + idProducto + ", cant: " + cantidadProducto
-                            + ", precio: " + precioProducto + ", nombre: " + nombreProducto + "]"; //Imprime el error junto a los valores guardados
+                        respuesta = "Cantidad o precio no válido";
+                    }
+                    else
+                    {
+                       if(cantidad <= 0 || precio <= 0)
+                        {
+                            respuesta = "Debe ingresar valores superiores a 0";
+                        }
+                        else
+                        {
+                            try
+                            {
+                                modelo.ModificarProductos(idProducto, cantidadProducto, precioProducto, nombreProducto);
+                                respuesta = "Producto modificado!";
+                                // Después de modificar, vuelve a cargar los productos en el DataGridView
+
+                            }
+                            catch (MySqlException ex)
+                            {
+                                respuesta = "Error al modificar el producto: " + ex.Message + "[id producto: " + idProducto + ", cant: " + cantidadProducto
+                                    + ", precio: " + precioProducto + ", nombre: " + nombreProducto + "]"; //Imprime el error junto a los valores guardados
+                            }
+                        }
                     }
                 }
+
+                
             }
 
             return respuesta;
@@ -130,16 +154,23 @@ namespace Inventario
         {
             InventarioModel modelo = new InventarioModel();
             string respuesta = "";
-
-            try
+            if (string.IsNullOrEmpty(idProducto))
             {
-                modelo.EliminarProductos(idProducto);
-                respuesta = "Producto eliminado!";
+                respuesta = "Por favor selecciona un producto para eliminarlo";
             }
-            catch (MySqlException ex)
+            else
             {
-                respuesta = "Error al eliminar el producto: " + ex.Message;
+                try
+                {
+                    modelo.EliminarProductos(idProducto);
+                    respuesta = "Producto eliminado!";
+                }
+                catch (MySqlException ex)
+                {
+                    respuesta = "Error al eliminar el producto: " + ex.Message;
+                }
             }
+           
 
             return respuesta;
         }

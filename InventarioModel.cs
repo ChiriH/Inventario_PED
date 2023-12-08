@@ -11,7 +11,11 @@ namespace Inventario
 {
     class InventarioModel
     {
-
+        private Dictionary<string, Producto> tablaHashProductos;
+        public InventarioModel()
+        {
+            tablaHashProductos = new Dictionary<string, Producto>();
+        }
         public Usuarios loginUsuario(string usuario)
         {
             MySqlDataReader reader;
@@ -35,6 +39,12 @@ namespace Inventario
             }
             return usr;
         }
+
+        //TABLA HASH
+
+
+
+
 
         public bool ExistenciaProducto(string nombreProducto)
         {
@@ -66,6 +76,89 @@ namespace Inventario
             comando.ExecuteNonQuery();
 
             cone.Close();
+
+            Producto nuevoProducto = new Producto
+            {
+
+                Nombre = nombreProducto,
+                Cantidad = int.Parse(cantidadProducto),
+                Precio = decimal.Parse(precioProducto)
+            };
+
+            tablaHashProductos[nombreProducto] = nuevoProducto;
+        }
+        public List<Producto> VistaProductos()
+        {
+            List<Producto> productos = new List<Producto>();
+
+            try
+            {
+                MySqlConnection cone = ConexionDB.GetConnection();
+                string sql = "SELECT * FROM productos";
+                MySqlCommand comando = new MySqlCommand(sql, cone);
+                cone.Open();
+
+                using (MySqlDataReader reader = comando.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Producto producto = new Producto
+                        {
+                            Id = reader["id"].ToString(),
+                            Nombre = reader["nombre"].ToString(),
+                            Cantidad = Convert.ToInt32(reader["cantidad"]),
+                            Precio = Convert.ToDecimal(reader["precio"])
+                        };
+
+                        productos.Add(producto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener los productos: " + ex.ToString());
+            }
+
+            return productos;
+        }
+        public List<Producto> BuscarProducto(string nombre)
+        {
+            if (tablaHashProductos.TryGetValue(nombre, out Producto producto))
+            {
+
+
+                return new List<Producto> { producto };
+            }
+            else
+            {
+                MySqlConnection cone = ConexionDB.GetConnection();
+                cone.Open();
+
+                string sql = "SELECT * FROM productos WHERE nombre = @nombre";
+                MySqlCommand comando = new MySqlCommand(sql, cone);
+                comando.Parameters.AddWithValue("@nombre", nombre);
+
+                using (MySqlDataReader reader = comando.ExecuteReader())
+                {
+                    List<Producto> productosEncontrados = new List<Producto>();
+
+                    while (reader.Read())
+                    {
+                        producto = new Producto
+                        {
+                            Id = reader["id"].ToString(),
+                            Nombre = reader["nombre"].ToString(),
+                            Cantidad = Convert.ToInt32(reader["cantidad"]),
+                            Precio = Convert.ToDecimal(reader["precio"])
+                        };
+
+                        tablaHashProductos[nombre] = producto;
+                        productosEncontrados.Add(producto);
+                    }
+
+                    return productosEncontrados;
+                }
+            }
         }
         public void MostrarProductos(DataGridView tablaProductos)
         {

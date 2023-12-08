@@ -106,6 +106,7 @@
             this.btnModEli.Size = new System.Drawing.Size(125, 125);
             this.btnModEli.TabIndex = 18;
             this.btnModEli.UseVisualStyleBackColor = false;
+            this.btnModEli.Click += new System.EventHandler(this.btnModEli_Click);
             // 
             // btnCerrar
             // 
